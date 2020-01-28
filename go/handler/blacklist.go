@@ -2,12 +2,10 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/tjandrayana/lua-project-v1/go/services"
 	"io/ioutil"
-	"net/http"
 	"log"
-
+	"net/http"
 )
 
 
@@ -26,7 +24,6 @@ func (m blacklistCheckHandler)blacklistCheck(w http.ResponseWriter, r *http.Requ
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Something Wrong !!!")
 		return
 	}
 
@@ -34,13 +31,14 @@ func (m blacklistCheckHandler)blacklistCheck(w http.ResponseWriter, r *http.Requ
 	if err := json.Unmarshal(body,&bp); err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Something Wrong !!!")
 		return
 	}
 
 	isBlacklist := m.service.CheckBlacklist(bp)
+	if isBlacklist{
+		w.WriteHeader(http.StatusForbidden)
+		return
+	}
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, fmt.Sprintf(`{"is_blacklist":%t}`,isBlacklist))
 	return
-
 }

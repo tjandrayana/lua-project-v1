@@ -6,14 +6,12 @@ blacklist_dictionary["172.256.0.1"] = 1
 blacklist_dictionary["39.144.1"] = 1
 blacklist_dictionary["Mozilla/5.0 (iPad; U; CPU OS 3_2_1 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Mobile/7B405"] = 1
 
-
 function M.interrupt()
-
     ngx.req.read_body()
 
     local data_body = ngx.req.get_body_data()
     if not data_body then
-        print("*** Databody nil   -> ")
+        print("Nil body")
         return ngx.exit(403)
     end
 
@@ -31,7 +29,6 @@ function M.interrupt()
         return ngx.exit(ngx.HTTP_FORBIDDEN)
     end
 
-    print("*** You are allowed *** " )
     ngx.status = ngx.HTTP_OK
     return ngx.exit(ngx.HTTP_OK)
 
